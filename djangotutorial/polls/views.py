@@ -1,10 +1,27 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from .models import Question
 
 
 def index(request):
-    return HttpResponse(
-        "To my wonderful husband: you are kind, funny, warm, and have a nice duck."
-    )
+    latest_question_list = Question.objects.order_by("-pub_date")[:5]
+    context = {"latest_question_list": latest_question_list}
+    return render(request, "polls/index.html", context)
+
+
+def detail(request, question_id: str) -> HttpResponse:
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
+    return render(request, "polls/detail.html", {"question": question})
+
+
+def results(request, question_id: str) -> HttpResponse:
+    return HttpResponse(f"You're looking at the results of question {question_id}.")
+
+
+def vote(request, question_id: str) -> HttpResponse:
+    return HttpResponse(f"You're voting on question {question_id}.")
