@@ -6,17 +6,22 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "django>=5.2.7",
-    "ruff>=0.15.1",
 ]
 
 [tool.ruff]
 line-length = 88
 
 [tool.ruff.lint]
-select = ["E", "F", "I"]
+select = ["E", "F", "I", "UP", "D"]
+ignore = ["F401"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["myapp"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.1",
+]
 
 
 
